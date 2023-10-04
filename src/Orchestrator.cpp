@@ -1,19 +1,24 @@
 #include "Orchestrator.h"
-#include <iostream>
 
-Orchestrator::Orchestrator(const std::vector<Node>& nodes) : nodes(nodes) {}
-
-void Orchestrator::distributeTasks(const std::vector<Task>& tasks) {
-    int currentNodeIndex = 0;
-
-    for (const Task& task : tasks) {
-        nodes[currentNodeIndex].addTask(task);
-        currentNodeIndex = (currentNodeIndex + 1) % nodes.size(); // load balancing
-    }
+void Orchestrator::addNode(const Node& node) {
+    nodes.push_back(node);
 }
 
-void Orchestrator::monitorNodes() {
-    for (Node& node : nodes) {
-        node.startProcessing();
+void Orchestrator::addTask(const Task& task) {
+    taskQueue.push_back(task);
+}
+
+void Orchestrator::scheduleTasks() {
+    for (Task& task : taskQueue) {
+        for (Node& node : nodes) {
+            if (node.available() && 
+                task.getCPU() <= node.getAvailableCPU() && 
+                task.getMemory() <= node.getAvailableMemory()) {
+                
+                node.executeTask(task);
+                task.markCompleted();
+                break;
+            }
+        }
     }
 }

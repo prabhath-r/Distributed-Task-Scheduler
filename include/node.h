@@ -1,24 +1,35 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <string>
-#include <vector>
 #include "Task.h"
 
 class Node {
-public:
-    Node(std::string nodeId);
-    void addTask(const Task& task);
-    void startProcessing();
-    void completeTask(int taskId);
-
-    const std::vector<Task>& getTasks() const {
-        return tasks;
-    }
-
 private:
-    std::string nodeId;
-    std::vector<Task> tasks;
+    int id; // unique identifier for the node
+    int totalCPU; // total CPU resources
+    int totalMemory; // total Memory resources
+    bool isAvailable; // node availability status
+
+public:
+    Node(int _id, int _cpu, int _mem) : 
+        id(_id), totalCPU(_cpu), totalMemory(_mem), isAvailable(true) {}
+
+    int getId() const { return id; }
+    int getAvailableCPU() const { return totalCPU; }
+    int getAvailableMemory() const { return totalMemory; }
+    bool available() const { return isAvailable; }
+
+    void markBusy() { isAvailable = false; }
+    void markAvailable() { isAvailable = true; }
+
+    // Simulating task execution (for now, just marking node as busy)
+    void executeTask(const Task& task) {
+        if (task.getCPU() <= totalCPU && task.getMemory() <= totalMemory) {
+            markBusy();
+            // Here you can add logic to simulate task execution
+        }
+    }
 };
 
-#endif
+
+#endif // NODE_H

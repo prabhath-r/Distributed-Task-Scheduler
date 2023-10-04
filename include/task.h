@@ -2,30 +2,22 @@
 #define TASK_H
 
 class Task {
-public:
-    Task(int id, int duration);
-
-    int getId() const {
-        return id;
-    }
-
-    int getDuration() const {
-        return duration;
-    }
-
-    void setAlgorithm(const std::string& algorithm) {
-        this->algorithm = algorithm;
-    }
-
-    void setOutputFormat(const std::string& outputFormat) {
-        this->outputFormat = outputFormat;
-    }
-
 private:
-    int id;
-    int duration;
-    std::string algorithm;
-    std::string outputFormat;
+    int id; // unique identifier for the task
+    int requiredCPU; // required CPU resources
+    int requiredMemory; // required Memory resources
+    bool isCompleted; // task completion status
+
+public:
+    Task(int _id, int _cpu, int _mem) : 
+        id(_id), requiredCPU(_cpu), requiredMemory(_mem), isCompleted(false) {}
+
+    int getId() const { return id; }
+    int getCPU() const { return requiredCPU; }
+    int getMemory() const { return requiredMemory; }
+    bool completed() const { return isCompleted; }
+
+    void markCompleted() { isCompleted = true; }
 };
 
-#endif
+#endif // TASK_H

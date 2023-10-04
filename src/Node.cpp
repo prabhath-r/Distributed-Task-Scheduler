@@ -1,22 +1,35 @@
-#include "Node.h"
-#include <iostream>
-#include <thread>  
+#include "../include/Node.h"
 
-Node::Node(std::string nodeId) : nodeId(nodeId) {}
+Node::Node(int _id, int _cpu, int _mem) : 
+    id(_id), totalCPU(_cpu), totalMemory(_mem), isAvailable(true) {}
 
-void Node::addTask(const Task& task) {
-    tasks.push_back(task);
+int Node::getId() const {
+    return id;
 }
 
-void Node::startProcessing() {
-    for (Task& task : tasks) {
-        std::cout << "Node " << nodeId << " is processing Task " << task.getId() << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(task.getDuration()));  // simulating task processing by sleeping for the task's duration
+int Node::getAvailableCPU() const {
+    return totalCPU;
+}
 
-        completeTask(task.getId());
+int Node::getAvailableMemory() const {
+    return totalMemory;
+}
+
+bool Node::available() const {
+    return isAvailable;
+}
+
+void Node::markBusy() {
+    isAvailable = false;
+}
+
+void Node::markAvailable() {
+    isAvailable = true;
+}
+
+void Node::executeTask(const Task& task) {
+    if (task.getCPU() <= totalCPU && task.getMemory() <= totalMemory) {
+        markBusy();
+        // Here you can add logic to simulate task execution
     }
-}
-
-void Node::completeTask(int taskId) {
-    std::cout << "Node " << nodeId << " completed Task " << taskId << std::endl;
 }

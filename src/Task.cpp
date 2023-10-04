@@ -1,11 +1,24 @@
 #include "Task.h"
 
-Task::Task(int id, int duration) : id(id), duration(duration) {}
+Task::Task(int _id, int _cpu, int _mem) : 
+    id(_id), requiredCPU(_cpu), requiredMemory(_mem), isCompleted(false) {}
 
-void Task::setAlgorithm(const std::string& algorithm) {
-    this->algorithm = algorithm;
+int Task::getId() const {
+    return id;
 }
 
-void Task::setOutputFormat(const std::string& outputFormat) {
-    this->outputFormat = outputFormat;
+int Task::getCPU() const {
+    return requiredCPU;
+}
+
+int Task::getMemory() const {
+    return requiredMemory;
+}
+
+bool Task::completed() const {
+    return isCompleted;
+}
+
+void Task::markCompleted() {
+    isCompleted = true;
 }

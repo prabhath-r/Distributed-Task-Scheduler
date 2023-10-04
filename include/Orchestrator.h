@@ -1,18 +1,37 @@
 #ifndef ORCHESTRATOR_H
 #define ORCHESTRATOR_H
 
-#include <vector>
 #include "Node.h"
-#include "Task.h"
+#include <vector>
 
 class Orchestrator {
-public:
-    Orchestrator(const std::vector<Node>& nodes);
-    void distributeTasks(const std::vector<Task>& tasks);
-    void monitorNodes();
-
 private:
-    std::vector<Node> nodes;
-};
+    std::vector<Node> nodes; // list of nodes
+    std::vector<Task> taskQueue; // queue of tasks
 
-#endif 
+public:
+    void addNode(const Node& node) {
+        nodes.push_back(node);
+    }
+
+    void addTask(const Task& task) {
+        taskQueue.push_back(task);
+    }
+
+    // Basic FCFS scheduling for now
+    void scheduleTasks() {
+        for (Task& task : taskQueue) {
+            for (Node& node : nodes) {
+                if (node.available() && 
+                    task.getCPU() <= node.getAvailableCPU() && 
+                    task.getMemory() <= node.getAvailableMemory()) {
+                    
+                    node.executeTask(task);
+                    task.markCompleted();
+                    break;
+                }
+            }
+        }
+    }
+};
+#endif // ORCHESTRATOR_H
