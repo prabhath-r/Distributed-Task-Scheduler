@@ -1,23 +1,39 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include <string>
+#include <vector>
+
+enum class TaskState {
+    WAITING, 
+    RUNNING, 
+    COMPLETED
+};
+
 class Task {
 private:
-    int id; // unique identifier for the task
-    int requiredCPU; // required CPU resources
-    int requiredMemory; // required Memory resources
-    bool isCompleted; // task completion status
+    int id;
+    int requiredCPU;
+    int requiredMemory;
+    int priority; // higher value means higher priority
+    TaskState state;
+    std::vector<int> dependencies; // IDs of tasks this task depends on
 
 public:
-    Task(int _id, int _cpu, int _mem) : 
-        id(_id), requiredCPU(_cpu), requiredMemory(_mem), isCompleted(false) {}
+    Task(int _id, int _cpu, int _mem, int _priority);
 
-    int getId() const { return id; }
-    int getCPU() const { return requiredCPU; }
-    int getMemory() const { return requiredMemory; }
-    bool completed() const { return isCompleted; }
+    // Getters
+    int getId() const;
+    int getCPU() const;
+    int getMemory() const;
+    TaskState getState() const;
+    int getPriority() const;
+    const std::vector<int>& getDependencies() const;
 
-    void markCompleted() { isCompleted = true; }
+    // Setters
+    void setState(TaskState _state);
+    void addDependency(int taskId);
+    void removeDependency(int taskId);
 };
 
 #endif // TASK_H

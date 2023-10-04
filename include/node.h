@@ -2,34 +2,37 @@
 #define NODE_H
 
 #include "Task.h"
+#include <string>
+#include <vector>
+#include <thread>
+#include <mutex>
 
 class Node {
 private:
-    int id; // unique identifier for the node
-    int totalCPU; // total CPU resources
-    int totalMemory; // total Memory resources
-    bool isAvailable; // node availability status
+    int id;
+    int totalCPU;
+    int totalMemory;
+    bool isAvailable;
+    int threads; // number of threads the node has
+    std::mutex mtx; // mutex for thread safety
+
+    void processTask(Task& task); // private method to process a task
 
 public:
-    Node(int _id, int _cpu, int _mem) : 
-        id(_id), totalCPU(_cpu), totalMemory(_mem), isAvailable(true) {}
+    Node(int _id, int _cpu, int _mem, int _threads);
+    
+    // Getters
+    int getId() const;
+    int getAvailableCPU() const;
+    int getAvailableMemory() const;
+    bool available() const;
 
-    int getId() const { return id; }
-    int getAvailableCPU() const { return totalCPU; }
-    int getAvailableMemory() const { return totalMemory; }
-    bool available() const { return isAvailable; }
+    // Node state methods
+    void markBusy();
+    void markAvailable();
 
-    void markBusy() { isAvailable = false; }
-    void markAvailable() { isAvailable = true; }
-
-    // Simulating task execution (for now, just marking node as busy)
-    void executeTask(const Task& task) {
-        if (task.getCPU() <= totalCPU && task.getMemory() <= totalMemory) {
-            markBusy();
-            // Here you can add logic to simulate task execution
-        }
-    }
+    // Task methods
+    void executeTasks(std::vector<Task>& tasks);
 };
-
 
 #endif // NODE_H

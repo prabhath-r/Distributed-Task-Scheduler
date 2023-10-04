@@ -1,35 +1,35 @@
-#include "../include/Node.h"
+#include "Orchestrator.h"
 
-Node::Node(int _id, int _cpu, int _mem) : 
-    id(_id), totalCPU(_cpu), totalMemory(_mem), isAvailable(true) {}
+Orchestrator::Orchestrator() {}
 
-int Node::getId() const {
-    return id;
+void Orchestrator::addNode(const Node& node) {
+    nodes.push_back(node);
 }
 
-int Node::getAvailableCPU() const {
-    return totalCPU;
+void Orchestrator::addTask(const Task& task) {
+    taskQueue.push(task);
 }
 
-int Node::getAvailableMemory() const {
-    return totalMemory;
-}
-
-bool Node::available() const {
-    return isAvailable;
-}
-
-void Node::markBusy() {
-    isAvailable = false;
-}
-
-void Node::markAvailable() {
-    isAvailable = true;
-}
-
-void Node::executeTask(const Task& task) {
-    if (task.getCPU() <= totalCPU && task.getMemory() <= totalMemory) {
-        markBusy();
-        // Here you can add logic to simulate task execution
+void Orchestrator::distributeTasks() {
+    for (Node& node : nodes) {
+        if (taskQueue.empty()) {
+            break;
+        }
+        if (node.available()) {
+            std::vector<Task> tasksForNode;
+            while (!taskQueue.empty() && tasksForNode.size() < node.getAvailableCPU()) {
+                tasksForNode.push_back(taskQueue.top());
+                taskQueue.pop();
+            }
+            node.executeTasks(tasksForNode);
+        }
     }
+}
+
+void Orchestrator::scheduleTasks() {
+    distributeTasks();
+}
+
+void Orchestrator::handleTaskDependencies(Task& task) {
+    // todo: handle tasks that depend on other task or tasks
 }

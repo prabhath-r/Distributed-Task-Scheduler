@@ -1,7 +1,7 @@
 #include "Task.h"
 
-Task::Task(int _id, int _cpu, int _mem) : 
-    id(_id), requiredCPU(_cpu), requiredMemory(_mem), isCompleted(false) {}
+Task::Task(int _id, int _cpu, int _mem, int _priority)
+    : id(_id), requiredCPU(_cpu), requiredMemory(_mem), priority(_priority), state(TaskState::WAITING) {}
 
 int Task::getId() const {
     return id;
@@ -15,10 +15,26 @@ int Task::getMemory() const {
     return requiredMemory;
 }
 
-bool Task::completed() const {
-    return isCompleted;
+TaskState Task::getState() const {
+    return state;
 }
 
-void Task::markCompleted() {
-    isCompleted = true;
+int Task::getPriority() const {
+    return priority;
+}
+
+const std::vector<int>& Task::getDependencies() const {
+    return dependencies;
+}
+
+void Task::setState(TaskState _state) {
+    state = _state;
+}
+
+void Task::addDependency(int taskId) {
+    dependencies.push_back(taskId);
+}
+
+void Task::removeDependency(int taskId) {
+    dependencies.erase(std::remove(dependencies.begin(), dependencies.end(), taskId), dependencies.end());
 }
