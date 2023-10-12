@@ -30,13 +30,13 @@ The system serves as a robust foundation for any distributed computing environme
 ### Installation
 
 1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/DistributedTaskScheduler.git
-2. Navigate to the project directory and compile:
-  ```sh
-   g++ -o scheduler main.cpp
+   `git clone https://github.com/yourusername/DistributedTaskScheduler.git`
+   
+3. Navigate to the project directory and compile:
+   `g++ -o scheduler main.cpp `
+   
 3. After successful compilation, run the binary
-  ./scheduler --help
+   `./scheduler --help`
 
 ### Usage
 I've designed this project for simplicity and ease of use. Since the development of the dashboard is in progress, the primary way to interact with the Distributed Task Scheduler System is through the command line or terminal, following the instructions above.
