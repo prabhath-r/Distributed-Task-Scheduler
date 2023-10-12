@@ -1,35 +1,44 @@
-#include "Orchestrator.h"
+#include "node.h"
+#include <thread>
+#include <algorithm>
 
-Orchestrator::Orchestrator() {}
-
-void Orchestrator::addNode(const Node& node) {
-    nodes.push_back(node);
+void Node::processTask(Task& task) {
+    // Simulating task processing
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    task.setState(TaskState::COMPLETED);
 }
 
-void Orchestrator::addTask(const Task& task) {
-    taskQueue.push(task);
+Node::Node(int _id, int _cpu, int _mem, int _threads)
+    : id(_id), totalCPU(_cpu), totalMemory(_mem), isAvailable(true), threads(_threads) {}
+
+int Node::getId() const {
+    return id;
 }
 
-void Orchestrator::distributeTasks() {
-    for (Node& node : nodes) {
-        if (taskQueue.empty()) {
-            break;
-        }
-        if (node.available()) {
-            std::vector<Task> tasksForNode;
-            while (!taskQueue.empty() && tasksForNode.size() < node.getAvailableCPU()) {
-                tasksForNode.push_back(taskQueue.top());
-                taskQueue.pop();
-            }
-            node.executeTasks(tasksForNode);
+int Node::getAvailableCPU() const {
+    return totalCPU;  // Simplification for now
+}
+
+int Node::getAvailableMemory() const {
+    return totalMemory;  // Simplification for now
+}
+
+bool Node::available() const {
+    return isAvailable;
+}
+
+void Node::markBusy() {
+    isAvailable = false;
+}
+
+void Node::markAvailable() {
+    isAvailable = true;
+}
+
+void Node::executeTasks(std::vector<Task>& tasks) {
+    for (Task& task : tasks) {
+        if (task.getState() == TaskState::WAITING) {
+            processTask(task);
         }
     }
-}
-
-void Orchestrator::scheduleTasks() {
-    distributeTasks();
-}
-
-void Orchestrator::handleTaskDependencies(Task& task) {
-    // todo: handle tasks that depend on other task or tasks
 }

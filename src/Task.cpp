@@ -1,4 +1,5 @@
-#include "Task.h"
+#include "task.h"
+#include <algorithm>
 
 Task::Task(int _id, int _cpu, int _mem, int _priority)
     : id(_id), requiredCPU(_cpu), requiredMemory(_mem), priority(_priority), state(TaskState::WAITING) {}

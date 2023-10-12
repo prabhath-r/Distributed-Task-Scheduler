@@ -1,15 +1,6 @@
 #include "Orchestrator.h"
-
-Orchestrator::Orchestrator() {}
-
-void Orchestrator::addNode(const Node& node) {
-    nodes.push_back(node);
-}
-
-void Orchestrator::addTask(const Task& task) {
-    taskQueue.push(task);
-    tasksVector.push_back(task); // add to the vector for easy lookup
-}
+#include <algorithm>
+#include <stdexcept>
 
 void Orchestrator::distributeTasks() {
     for (Node& node : nodes) {
@@ -27,21 +18,29 @@ void Orchestrator::distributeTasks() {
     }
 }
 
+Orchestrator::Orchestrator() {}
+
+void Orchestrator::addNode(const Node& node) {
+    nodes.push_back(node);
+}
+
+void Orchestrator::addTask(const Task& task) {
+    taskQueue.push(task);
+}
+
 void Orchestrator::scheduleTasks() {
     distributeTasks();
 }
 
 void Orchestrator::handleTaskDependencies(Task& task) {
-    const std::vector<int>& dependencies = task.getDependencies();
-
+    std::vector<int> dependencies = task.getDependencies();
     if (dependencies.empty()) {
         return;
     }
 
     bool allDependenciesCompleted = true;
     for (int dependencyId : dependencies) {
-        Task& dependencyTask = getTaskById(dependencyId);
-
+        Task dependencyTask = getTaskById(dependencyId);
         if (dependencyTask.getState() != TaskState::COMPLETED) {
             allDependenciesCompleted = false;
             break;
@@ -54,7 +53,7 @@ void Orchestrator::handleTaskDependencies(Task& task) {
 }
 
 Task& Orchestrator::getTaskById(int id) {
-    for (Task& t : tasksVector) {
+    for (const Task& t : taskQueue) {
         if (t.getId() == id) {
             return t;
         }
