@@ -30,7 +30,7 @@ The system serves as a robust foundation for any distributed computing environme
 ### Installation
 
 1. Clone the repository:
-   `git clone https://github.com/yourusername/DistributedTaskScheduler.git`
+   `git clone https://github.com/prabhath-r/DistributedTaskScheduler.git`
    
 3. Navigate to the project directory and compile:
    `g++ -o scheduler main.cpp `
