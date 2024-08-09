@@ -38,11 +38,5 @@ The system serves as a robust foundation for any distributed computing environme
 3. After successful compilation, run the binary
    `./scheduler --help`
 
-### Usage
-I've designed this project for simplicity and ease of use. Since the development of the dashboard is in progress, the primary way to interact with the Distributed Task Scheduler System is through the command line or terminal, following the instructions above.
-
-### Feedback
-As this is an evolving project, feedback on usability, bugs, or feature requests is highly appreciated. You can provide feedback through the project's GitHub issues section or directly via email to prabhathr96@gmail.com
-
 ### License
 This project is licensed under the MIT License. See the LICENSE.md file for details.
